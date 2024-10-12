@@ -1,0 +1,35 @@
+## Multi-stage build
+
+
+*Docker'da multi-stage build, Dockerfile içinde birden fazla aşama (stage) kullanarak daha küçük ve optimize edilmiş Docker image'ları 
+oluşturmayı sağlayan bir tekniktir. Bu yöntem, özellikle büyük ve karmaşık uygulamaların derlenmesi ve paketlenmesi sırasında faydalıdır.
+
+multi-stage build örneği bulunmaktadır. Bu örnekte, ilk aşamada uygulama derlenir ve ikinci aşamada sadece çalıştırmak için gerekli dosyalar kopyalanır.
+
+
+# İlk Aşama: build 
+FROM maven:3.9.4-openjdk-21 AS build
+
+# Çalışma dizinini ayarla
+WORKDIR /app
+
+# Maven proje dosyalarını kopyala
+COPY pom.xml .
+COPY src /app/src
+
+# Bağımlılıkları yükle ve uygulamayı derle
+RUN mvn clean package -DskipTests
+
+
+
+# İkinci Aşama: Çalıştırma
+FROM openjdk:21-jdk-slim
+
+# Çalışma dizinini ayarla
+WORKDIR /app
+
+# Derlenmiş JAR dosyasını kopyala
+COPY --from=build /app/target/myapp.jar /app/myapp.jar
+
+# JAR dosyasını çalıştır
+CMD ["java", "-jar", "/app/myapp.jar"]

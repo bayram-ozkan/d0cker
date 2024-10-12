@@ -1,0 +1,155 @@
+#################################################  Docker Swarm #################################################################
+*Docker konteynerlerini bir grup sunucuda (node) yönetmek için kullanılan bir kümeleme (orchestration) aracıdır. Docker Swarm,
+bir dizi Docker Engine'i tek bir küme (cluster) halinde düzenleyerek bunları tek bir Docker Engine gibi yönetmenizi sağlar. 
+Docker Swarm, Docker ın yerel bir özelliğidir ve Docker CLI komutları ile entegre çalışır.
+
+TCP port 2377 (Cluster yönetimi)
+TCP ve UDP PORT  7946 (Node lar arası iletişim)
+UDP port 4789 (Overlay Network için)
+
+
+
+#################################################################################################################################
+************************************************** Docker Swarm kurulumu ********************************************************
+docker swarm
+
+
+192.168.1.101 ansibledocker.docker.local ansibledocker
+192.168.1.51 devopsdocker1.docker.local  devopsdocker1
+192.168.1.52 devopsdocker2.docker.local  devopsdocker2
+192.168.1.53 devopsdocker3.docker.local  devopsdocker3
+
+#Docker swarm için bir makineyi yönetici yapmak.
+docker swarm init --advertise-addr 
+
+#Komutu çalıştırdıktan sonra token la birlikte bir komut  veriyor
+
+docker swarm join --token SWMTKN-1-0m5h48bu4v6m0gysbol5yux4dd0bpqdye0jhzojqmzlwdrydzl-el8lwoc3wk6fop1od5ipegv1n 192.168.1.101:2377
+
+#Docker swarm a dahil etmek istediğimiz makinelerde bu komutu çalıştırıyoruz ve swarm a dahil oluyorlar.
+
+
+################################################################################################################################
+**************************************************Docker  swarm komutları ******************************************************
+################################################################################################################################
+
+
+
+docker swarm init                      
+ # Docker swarm i devreye alır
+
+
+docker swarm init --advertise-addr  192.168.0.1 8
+ # Docker swarm i belirtilen ip adresinde devreye alır
+
+docker swarm join-token manager        
+ # Manager node oluşturmak için token verir
+
+docker swarm join-token worker         
+ # Worker node oluşturmak için token verir
+
+
+
+docker node ls          
+ # Docker swarm a dahil olan makineleri listelemek için 
+
+
+docker service create --name myservice --replicas 3 -p 80:80 nginx
+ # nginx imajını kullanarak myservice adında bir hizmet oluşturur ve bu hizmetin 3 kopyasını çalıştırır.
+
+
+docker service create --name global-service --mode global nginx
+ # nginx imajını kullanarak global-service adında bir global hizmet oluşturur. Bu hizmet, kümedeki her düğümde bir konteyner çalıştırır.
+
+
+
+docker service ls            
+ # Oluşturulan  hizmetleri listeler
+
+
+docker service ps myservice
+ # Belirli bir hizmetin durumunu gösterir.
+
+
+docker service update  --detach --update-delay 5s --update-parallelism 2  --image nginx:latest myservice
+ # myservice hizmetini  arka planda  2şerli olarak işlemler arası 5 saniye bekleyerek  nginx:latest imajı yla günceller.
+
+
+docker service rollback myservice
+* Docker Swarm'da bir hizmetin son güncellemeden önceki durumuna geri döndürülmesini sağlar. Bu, bir hizmetin güncellenmesi 
+sırasında oluşan hataları veya beklenmeyen sorunları hızlı bir şekilde geri almak için kullanılır. Rollback işlemi, hizmetin
+önceki yapılandırmasını ve imajını geri yükler.
+
+
+docker service inspect --pretty myservice
+* Rollback işleminin başarılı olduğunu doğrulamak için hizmetin durumunu kontrol edebiliriz
+
+
+docker service scale myservice=5
+ # Mevcut bir hizmetin kopya sayısını (replica) ölçeklendirebiliriz 
+
+
+
+docker service rm myservice
+ # Bir hizmeti silmek için
+
+
+dockear network create -d overley over-net 
+
+
+
+docker secret create 
+* Docker Swarm'da gizli bilgileri (secrets) yönetmek için kullanılır. Bu bilgiler, veritabanı şifreleri, API anahtarları veya TLS 
+sertifikaları gibi hassas verilerdir. Secrets, Docker Swarm'da çalışan hizmetler arasında güvenli bir şekilde paylaşılabilir. 
+ Hizmeti oluştururken --secret bayrağı ile secret ekleyin.
+
+
+
+docker secret ls 
+* Oluşturulan secret ları listeler
+
+
+
+Docker Stack 
+* Docker Swarm modunda çalışan birden fazla hizmeti (service) tanımlamak ve yönetmek için kullanılan bir araçtır. Docker Compose 
+dosyasını kullanarak bir grup hizmeti bir arada tanımlayabilir ve bu hizmetleri bir küme (cluster) üzerinde yönetebilirsiniz. 
+Docker Stack, Docker Compose dosyasını alarak, Swarm kümesinde bu dosyaya uygun bir dağıtım (deployment) yapar.
+
+
+docker stack deploy -c docker-compose.yml my_stack
+* docker-compose.yml dosyasını kullanarak bir stack dağıtmak için kullanılır.
+
+
+docker stack ls
+* Dağıtılmış stack'leri listeler
+
+
+docker stack ps my_stack
+* Bir stack in durumunu kontrol eder.
+
+
+Bir stack içinde tanımlı hizmetleri listeler
+* docker stack services my_stack
+
+
+docker stack rm my_stack
+* Stack i kaldırmak için kullanılır.
+
+
+
+#############################################################################################################################################
+ ********************************************** Global ve Replicated Hizmetlerin Karşılaştırması ******************************************
+#############################################################################################################################################
+
+
+Özellik	                                Global Hizmet	                               Replicated Hizmet
+
+Çalıştırılan Kopya	                 Her düğümde bir kopya	                        Belirtilen sayıda kopya
+
+Ölçeklendirme                     Düğüm sayısına göre otomatik	                 Belirtilen kopya sayısına göre
+
+Kullanım Alanı	                   Sistem düzeyinde görevler	                  Uygulama düzeyinde görevler
+
+Yönetim                        Otomatik olarak her düğümde çalışır	         Belirtilen kopya sayısı üzerinden yönetilir
+
+#############################################################################################################################################

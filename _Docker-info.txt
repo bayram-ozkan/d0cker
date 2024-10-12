@@ -1,0 +1,408 @@
+#########################################################################################################################################
+#########################################################################################################################################
+#########################################################################################################################################
+-- DOCKER
+
+*Docker, konteynerleştirme teknolojisini kullanarak uygulamaların ve onların bağımlılıklarının taşınabilir, izole edilmiş ortamlar içinde 
+çalıştırılmasını sağlar. Docker, geliştiricilerin uygulamalarını bir "konteyner" içinde paketlemelerine ve bu konteynerleri herhangi bir 
+ortamda çalıştırmalarına olanak tanır. Bu sayede, uygulama her yerde aynı şekilde çalışır, böylece "çalışıyor ama benim bilgisayarımda"
+sorunu ortadan kalkar.
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+
+#########################################################################################################################################
+#########################################################################################################################################
+--  docker container 
+
+docker container -d --name test  httpd        #Bir container oluşturur ve çalıştırır.
+				  
+--name test  yle test isimli bir container oluşturur.(container ismi verilmezse rasgele verir.)
+-d           yle detach modde bir  belirtilen isimde bir container ı oluşturur ve arka planda çalıştırırlır
+httpd       belirtilen image dan bir container oluşturur.
+
+
+docker container run --rm  -it  tesh   sh      #Anlık container oluşturur ve stop edildiği anda silinir. (--rm komutuyla)
+
+Bir container çalışırken silinemez  (docker rm -f komutu hariç)
+
+docker exec test date             #exec la test adlı oluşturulan container ın içinde "date" isimli yeni bir uygulama/komut çalıştılırır.
+
+
+docker run --name con10 --env key1=deneme --env database_server=test.contoso.com ubuntu printenv    #--env la bir değişken tanımlıyoruz ve container içine yazdırıyoruz.
+												 	(printenv ile ubuntu container daki environment(değişken) ları yazdırıyoruz)
+
+docker run --name test --env-file env.list ubuntu printenv   #Local da oluşturulan environment ları içeren listeyi container a aktarır.
+
+
+
+
+docker run --name my_container --restart no my_image    -->>  --restart a daha sonra ayrıntılı bak !!!!!!
+
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- docker volume
+
+
+docker volume ls                   #volume komutuyla,  volume ları listeliyoruz.
+
+docker volume inspect test         #test adlı volume un ayrıntılarını listeliyoruz.
+
+docker volume create volume1          #test isimli bir volume oluşturuyoruz.
+
+
+docker run  -it --name test -v volume1:/test1 httpd sh  
+
+docker run  -it --name test -v volume1:/test1:ro httpd sh   #volume sadece readonly yetkisiyle erişebilyor(ro) 
+
+
+##Oluşturulan volume1 adlı volume u  conteiner da test1 e mount ettik. 
+
+#Bu bize dosyalarımızı, container in yaşam süresinden daha fazla saklamamızı sağlıyor
+
+
+#bind mount Direk makinedeki bir dosyayı container bağlar.
+
+docker run docker run -d -p 8080:80 --name website -v /website:/usr/share/nginx/html nginx  
+ 
+
+##Ana makinede olan website adlı klasörü containerdeki /usr/share/nginx/html e mount eder.    
+
+docker run -it --name bindm -v /root/deneme/:/d1/by httpd sh                                                                                  
+												  
+docker container prune   #sistemdeki çalışmayan tüm container ları siler
+
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- docker network 
+
+
+# Bridge	-> Varsayilan driverdır. 	Her network aktive edilmediği sürece bridge e bağlıdır.				
+
+# Host   -> Bu network e bağlı container da network izolasyonu olmaz. Sanki host üzerinde çalışan bir process gibi host un ağ kaynaklarını kullanır.
+
+# MacVlan  -> Bu driver ila oluşturulan network objeleri sayesinde  fiziksel ağlara kendi MAC adreslerine sahip birer fiziksel ağ adaptörüne sahipcesine bağlanabilirler.
+
+# None -> Container hiçbir şekilde ağ bağlantısına sahip değildir.
+
+# Overlay -> Aynı hostlar üzerindeki containerların aynı ağda çalışıyormuş gibi çalışması istendiğinde kullanılır.
+
+## Standart default 3 network oluşturur. (bridge, host, none)
+
+
+docker network  ls                                    #Mevcut networkleri gösterir.
+
+
+docker network inspect bridge                         #Belirtilen network hakkında bilgi sağlıyor
+
+docker network create mynetwork                       # Herhangi bir opsiyon tanımlanmazsa oluşturulan  mynetwork bridge şeklinde oluşturulur.
+      
+
+docker network create --driver bridge mynetwork       #mynetwork adında bridge bir network oluşturur.
+
+
+docker network create --driver bridge --subnet=10.10.0.0/16  --ip-range=10.10.10.0/24 --gateway=10.10.10.10 kopru2 
+#Yukarda belirtilen komutlarla belirtilen değerlerde bir  network oluşturulur.
+
+
+docker network create --driver bridge --subnet=10.10.0.0/16  --ip-range=10.10.10.0/24 --gateway=10.10.10.10 kopru2 
+#Yukarda belirtilen komutlarla belirtilen değerlerde bir  network oluşturulur.
+
+
+docker container run -d  --name deneme1 --net host ozgurozturknet/adanzyedocker           # ozgurozturknet/adanzyedocker adlı imaj dan deneme1 adlı container i host network ünde oluşturduk
+
+
+docker container run --network yeni_network_name                                           #Oluşturulan container i yeni oluşturulan network e bağlar.
+
+docker network create kopru1                                                               #kopru1 adında bridge modda bir network oluşturduk.                                                                           
+
+docker container run -dit --name websunucu --net kopru1 ozgurozturknet/adanzyedocker sh   
+
+docker container run -dit --name database --net kopru1 ozgurozturknet/adanzyedocker sh   
+
+
+# -dit le detach  (-d ) ve  (-it ) interactive modda container i oluşturuyor ve arka planda terminali çalışıyor. İstediğimiz zaman bağlanabiliyoruz
+# docker attach le websunucu isimli container in terminaline bağlanıyoruz.
+
+
+docker attach websuncu  #websunucu containerina bağlandık ve " ping database" yaparak contairler birbirine DNS üzerinden  oluşturduğumuz kopru1 adlı networkden ulaşabiliyorlar.
+
+control p+q (ctrl p +q ) kullanarak container terminalini arka plana alabiliriz. (read escape sequence)
+
+
+
+docker network create --driver bridge --subnet=10.10.0.0/16  --ip-range=10.10.10.0/24 --gateway=10.10.10.10 kopru2 
+#Yukarda belirtilen komutlarla belirtilen değerlerde bir  network oluşturulur.
+
+
+docker network  connect kopru2  database/ID   # database isimli ya da ID li container i kopru2 isimli network e bağlıyor 
+
+# Default bridge network de  bir container çalışırken başka bir network e bağlayamıyorsun. Lakin kullanıcı tanımlı bir networkle çalışan bir container i başka bir network e bağlayabiliyoruz.
+# Bir container birden fazla network e bağlanabilir.
+
+docker network disconnect kopru2 database     # database containerinden kopru2 network ünü siler.
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- docker logs
+
+Standart Input - Output - Error
+
+
+stdin(0)   -> Klavyeden ya da başka bir uygulamadan girişçe verilen  uygulamanın giriş akışıdır
+
+stdout(1)  ->
+
+stderr(2)  -> Hata mesajı göndermek için kullanılır.
+
+
+dockera logs test                 # test adli container dan logları gösterir.
+
+docker logs --details test        #  test adli container dan logları daha ayrıntılı  gösterir.
+
+docker logs -t test               # İlgili container a ait logları zaman damgalarıyla listeler
+
+docker logs --tail 5 test         #test adlı container in ürettiği son 5 log u gösterir.
+
+docker logs -f test               #test adlı container yla alakalı anlık ürettiği log kayıtlarına erişir.
+
+
+docker logs --until 2024-07-01T17:02:01.405336638Z   # Bu saate kadar olan logları göster.
+
+docker logs --since 2024-07-01T17:02:01.405336638Z   # Bu  saaten sonraki logları göster.
+
+
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- docker top
+
+docker top test                   
+
+*Container içerisinde çalışan process leri görüntüler.(container adını girilmezse tüm containerlerin processleri gösterilir.)
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- docker stats
+
+
+docker stats test                 
+*container in RAM ve CPU kullanımını gösterir.(container adını girilmezse tüm containerlerin RAM ve CPU kullanımları gösterilir.)
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- CPU ve memory
+
+
+docker run -d --name test --memory=100M nginx                                      #container in RAM kullanımını 512 yle sınırlandırır.
+
+docker run -d --name test --memory=100M  --memory-swap=200M nginx                 # --memory-swap le herhangi bir yük anında sistemin çökmemesi için 200mb a kadar cpu kullanımına izin veriyor
+                                                                                  # swap memory den büyük olmak zorunda (200>100)
+
+
+docker run -d --name test --memory=512M --cpus="core sayısı" nginx  
+docker run -d --name test --memory=512M --cpus="2" nginx     #container ın CPU core kullanımını 2core la sınırlandırır.
+
+docker run -d --name test --memory=512M --cpuset-cpus="1,3"  #container sadece 1 ve 3 nolu core ları kullansın.
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+--  Environment variables  
+
+
+docker container run -it --env VAR1=deneme1  ubuntu bash
+
+docker contaier run -it --env-file file.txt ubuntu bash   #env variables ları tek tek yazmak yerine dosyaya yazıp dosyayıda container çalıştırırken environment yapabiliriz.
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- Dockerfile
+
+
+
+*Bir image oluşturmak istiyorsam bir Dockerfile oluşturmam ve onu build etmem lazım.
+
+#docker file oluştur.
+
+DockerFile
+
+FROM --> Sürüm ve kullanılacak image
+WORKDIR --> Dockerfile in dosyaları çekeceği yer
+COPY --> Dockerı	
+
+
+docker build -t odevim1 .                  #Bulunduğun dizinde -t ile odevim1 isminde  oluşturur. Sonuda nokta olması bu komutun çalıştırıldığı dizinde Dockerfile 
+docker build -t odevim1 -f Dockerfile2     # -f parametresitle farklı bir isimde ya da dizide olan Dokerfile dosyası belirtilebilir.
+
+
+docker tag odevim1 kullaniciadi/odevim1    #dockerhub a pushlamak için tag oluşturur.
+
+docker push kullanıcı_adı:repo_adi
+
+
+
+docker run -d  --name my-apache1  -p 80:80    -v "$PWD":/usr/local/apache2/  httpd  
+	
+
+docker run -d  --name my-apache2  -p 1919:80  -v /root/test2/:/usr/local/apache2/htdocs/ httpd
+
+
+docker run -d  --name my-nginx1  -p 9090:80  -v /home/caner/test/web-sayfa:/usr/share/nginx/html nginx
+
+
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- docker image
+
+
+*Docker imaj oluşturmak için   Dockerfile e bakıyor her katman için  talimatlara bakıyor. Talimatlarda değişiklik  varsa eğer o talimata kadar
+olan kısımları cache(önbellek) ten hızlıca yüklüyor. Burda talimatların sıralaması önemlidir.
+Dockerfile da değişmeyecek kısımlar en başta, değişecek kısımlar en sona yazılmalıdır. Mümkün olduğu kadar çok cache kullanılması sağlanılmalıdır.
+Bu sayede hızlıca imaj oluşturulması sağlanır.
+
+docker image ls           #Mevtcut image ları listeler.
+
+#Dockerfile oluşturulur.
+
+docker image build -t test1  .         # Dockerfile i build ettik
+
+docker image build -t version1 --build-arg VERSION=3.8.1 . 
+
+*Dockerfile'da ARG talimatını kullanarak VERSION değişkenini tanımlamanız ve bu değişkeni kullanmanız gerekir. Bu, Dockerfile içinde 
+build argümanını kullanmanıza olanak tanır.
+
+
+docker image tag 
+
+*Docker image ına yeni bir etiket (tag) vermek için kullanılan bir komuttur.Etiketleme işlemi, image'ın içeriğini değiştirmez, sadece ona yeni 
+bir isim veya versiyon numarası ekler.
+
+docker image tag myapp:latest myrepo/myapp:v1.0
+
+
+
+docker image pull nginx   #Mevcut nginx image ini local a çeker
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+************************************************* Port publish ************************************************
+--publish | -p 
+#####################
+
+
+usage : docker container run --publish hosts-port:container-pt/tcp-or-udp
+
+docker container run --name webserver -p 5000:80 nginx  #nginx image dan webserver adlı container i local da 5000 de yayına aldık.
+ 
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+$ docker cp 
+#####################
+
+
+*Docker konteynerleri ve yerel dosya sisteminiz arasında dosya ve dizinleri kopyalamak için kullanılır.Konteyner içindeki dosyaları host 
+sistemine kopyalamak veya host sisteminden konteyner içine dosya kopyalamak için oldukça kullanışlıdır.
+
+
+docker cp  <container_id>:<container_path>  <host_path>
+
+docker cp  uygulama:/usr/src/uygulama  .
+
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- docker commit 
+
+*Mevcut bir Docker konteynerinin anlık görüntüsünü (snapshot) alarak yeni bir Docker image oluşturmanızı sağlar. Bir konteynerde yapılan 
+değişiklikleri kalıcı hale getirmek ve bu değişiklikleri içeren bir image oluşturmak için kullanılır.Bu image daha sonra diğer konteynerleri oluşturmak için kullanılabilir.
+
+
+
+docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+
+docker commit my_container my_new_image
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- docker save
+
+
+*Bir veya daha fazla Docker image ını bir tar arşiv dosyası olarak kaydetmenizi sağlar. Bu arşiv dosyası, image ların taşınabilirliğini ve yedeklenmesini
+kolaylaştırır. Docker image larını başka sistemlere aktarmak veya yedeklemek istediğinizde kullanışlıdır.
+
+
+docker save [OPTIONS] IMAGE [IMAGE...]
+
+docker save -o my_image.tar my_image:latest
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+-- docker load 
+
+
+*Kaydedilen image ları başka bir sistemde veya aynı sistemde geri yüklemek için docker load komutunu kullanabilirsiniz.
+
+docker load -i my_image.tar
+
+
+
+
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+$ docker  registry
+
+*Docker image'larını depolamak, paylaşmak ve yönetmek için kullanılan merkezi bir depodur.
+
+
+
+
+
+docker rm -f $(docker ps -qa)
+
+docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)      
+*Docker da tüm containerları siler.
+
+
+docker system prune -a
+*Bu komut, kullanılmayan tüm Docker kaynaklarını (durdurulmuş konteynerler, gereksiz ağlar, gereksiz image'ler ve build cache) temizler. 
+-a seçeneği, kullanılmayan tüm image'leri de siler. Komutu çalıştırdıktan sonra sizden onay istenecektir, onayı verdikten sonra temizleme işlemi yapılır.
+
+
+docker container rm -f $(docker ps -aq) && \
+docker rm -f $(docker images -q) && \
+docker network rm $(docker network ls -q) && \
+docker volume rm $(docker volume ls -q)
+
+
+
+
+
+$e76zX(!3%&6^k4#
+
+
+
+
+
+
+/usr/share/nginx/html
+/usr/local/apache2

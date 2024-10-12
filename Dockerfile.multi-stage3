@@ -1,0 +1,20 @@
+#1. Aşama build aşaması 
+
+FROM  mcr.microsoft.com/java/jdk:8-zulu-alpine AS derleyici
+
+COPY .  /usr/src/uygulama
+
+WORKDIR /usr/src/uygulama
+
+RUN javac uygulama.java
+
+
+#2. Aşama  
+
+FROM mcr.microsoft.com/java/jre:8-zulu-alpine
+
+WORKDIR /uygulama
+
+COPY --from=derleyici /usr/src/uygulama .
+
+CMD [ "java", "uygulama"]

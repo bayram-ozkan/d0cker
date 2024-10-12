@@ -1,0 +1,57 @@
+#################################################################################################################
+$ docker compose
+#####################
+
+*Çoklu konteyner Docker uygulamalarını tanımlamak ve çalıştırmak için kullanılan bir araçtır. Docker Compose, bir uygulamanın hizmetlerini
+tanımlayan bir YAML dosyası (docker-compose.yml) kullanarak tüm hizmetleri tek bir komutla (docker-compose up) başlatmanıza olanak tanır.
+
+
+
+docker-compose --version
+* Yüklü olup olmadığını kontrol etmek için kullanılır
+
+docker-compose build 
+* Docker Compose dosyanızdaki hizmetler için belirtilen Dockerfile ları kullanarak imajları oluşturur. Bu komut, docker-compose.yml 
+dosyasında tanımlanan hizmetlerin imajlarını oluşturmak veya yeniden oluşturmak için kullanılır.
+
+
+docker-compose up
+* Tanımlanan tüm hizmetleri başlatır. (standart adlandırmada )
+
+
+docker-compose -f mydocker-compose.yml up
+docker-compose -f mydocker-compose.yml up -d
+docker-compose -f mydocker-compose.yml down
+docker-compose -f mydocker-compose.yml ps
+docker-compose -f mydocker-compose.yml build
+
+docker-compose -f *.yml ps
+* Farklı isimlerdeki yapılandırma dosyası/dosyalarını yukardaki belirtilen docker komutlarıyla kullanabilirsiniz.
+
+
+
+
+docker-compose up -d
+*Hizmetleri arka planda (detached mode) başlatır.
+
+docker-compose ps 
+* Docker Compose tarafından yönetilen hizmetlerin durumunu kontrol etmek için kullanılır.
+
+
+docker-compose logs
+* Hizmetlerin loglarını görüntüler.
+
+
+
+docker-compose down
+* Çalışan tüm hizmetleri durdurur.
+
+
+docker-compose images
+* Docker Compose da çalışan hizmetler için kullanılan Docker imajlarının bir listesini gösterir. 
+
+
+docker-compose config
+* Docker Compose yapılandırma dosyanızın geçerliliğini kontrol etmek ve birleşik yapılandırmayı görüntülemek için kullanılır.
+
+

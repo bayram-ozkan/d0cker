@@ -1,0 +1,33 @@
+FROM nginx:latest
+
+
+# label ile de key value pair olarak bu imajla ilgili bilgileri giriyoruz. her iki talimat da imajın içindeki sistemle alakalı değil.
+# her ikisi de imajın metadatasında saklanıyor. imajla alakali bilgiler. 
+LABEL maintainer="bayram ozkan" version="1.0" name="hello-docker"
+
+
+
+# bir adet env variable tanımlıyoruz. Daha sonra bunu runtime'da değiştireceğiz
+ENV KULLANICI="Dunyali"
+
+# Gerekli paketleri kuruyoruz
+RUN printf "deb http://deb.debian.org/debian/ bullseye main\ndeb-src http://deb.debian.org/debian/ bullseye main\n" > /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install curl -y
+
+
+# nginx web sayfalarını /usr/share/nginx/html folder'ında barındırıyor. O nedenle bu folder'a geçiyoruz
+WORKDIR /usr/share/nginx/html
+
+# web sitemizin açılış sayfası olan Hello_docker.html dosyasını buraya kopyalıyoruz.
+COPY Hello_docker.html /usr/share/nginx/html
+
+# sistemin düzgün çalıştığını ve nginx daemon'ının web sitesini publish etmekte bir sorun yaşamadığını test ediyoruz
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl -f http://localhost/ || exit 1
+
+
+# The command to run when the container starts, using JSON array syntax
+CMD ["sh", "-c", "sed -e 's/Kullanici/${KULLANICI}/' Hello_docker.html > index1.html && \\
+sed -e 's/Hostname/${HOSTNAME}/' index1.html > index.html && \\
+rm index1.html Hello_docker.html && \\
+nginx -g 'daemon off;'"]

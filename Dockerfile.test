@@ -1,0 +1,25 @@
+FROM nginx:latest
+
+# Metadata about the image
+LABEL maintainer="bayram ozkan" version="1.0"  name="hello-docker"
+
+# Environment variables to be used in the container
+ENV KULLANICI="Dunyali"
+
+
+# Update the package list
+# Install curl as it's not present in debian-slim
+RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list &&  apt-get update && apt-get install curl -y
+
+
+# Change the working directory to the folder where nginx serves content
+WORKDIR /usr/share/nginx/html
+
+# Copy the web page to the working directory
+COPY Hello_docker.html /usr/share/nginx/html
+
+# Health check to ensure nginx is running and serving the content correctly
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl -f http://localhost/ || exit 1
+
+# The command to run when the container starts, using JSON array syntax
+CMD ["sh", "-c", "sed -e 's/\\${KULLANICI}/${KULLANICI}/' Hello_docker.html > index1.html && sed -e 's/\\${HOSTNAME}/${HOSTNAME}/' index1.html > index.html && rm index1.html Hello_docker.html && nginx -g 'daemon off;'"]

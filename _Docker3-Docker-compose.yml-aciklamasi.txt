@@ -1,0 +1,102 @@
+##########################################################
+Docker-compose.yml 
+##########################################################
+
+docker-compose.yml dosyası 4 ana  kısımdan (service, networks, volumes, secrets) bölümlerinden oluşmaktadır
+
+
+version: '3.8'   ->  Compose dosyasının sürümünü belirtir.
+
+services:    -> Docker Compose tarafından yönetilecek olan Docker konteynerlerini tanımlar. Her bir hizmet (service) bir konteyneri temsil eder ve birden fazla hizmet tanımlanabilir.
+ 
+networks:    -> Docker konteynerlerinin birbirleriyle nasıl iletişim kuracağını tanımlar. Docker Compose, konteynerler arasında özel ağlar oluşturmanıza olanak tanır.
+
+volumes:     -> Kalıcı veri depolama için kullanılır. Hacimler (volumes), konteynerlerin yeniden başlatılması veya silinmesi durumunda bile verilerin korunmasını sağlar.
+
+secrets:     -> Hassas bilgilerin güvenli bir şekilde konteynerlere aktarılmasını sağlar. Bu bilgiler genellikle şifreler, API anahtarları gibi gizli verilerdir ve yalnızca Docker Swarm modunda çalışır.
+
+
+****************************************************************************************************************************************************************************************
+
+Aşağıdaki docker-compose daki  web adlı contaieri manuel olarak çalıştırabiliriz.
+
+"docker container run  --name web -v $(pwd)/html:/usr/share/nginx/html -p 8080:80  --network  frontend --restart always nginx:latest"
+Bunu docker-compose haline çevirdik.
+
+Nginx imajını kullanır, 8080 portunu 80 portuna yönlendirir, bir hacim kullanır, frontend ağına bağlanır ve her zaman yeniden başlatılır.
+
+****************************************************************************************************************************************************************************************
+   
+restart Seçenekleri
+
+no: 
+* (Varsayılan) Konteyner hiçbir zaman otomatik olarak yeniden başlatılmaz. Bu durumda, konteyner hata aldığında veya kapandığında, 
+Docker konteyneri yeniden başlatmaz.
+
+always
+* Konteyner her zaman yeniden başlatılır. Konteyner, durdurulsa veya hata verse bile Docker tarafından otomatik olarak yeniden başlatılır.
+
+unless-stopped
+* Konteyner, durdurulmadığı sürece yeniden başlatılır. Kullanıcılar konteyneri manuel olarak durdurursa, konteyner yeniden başlatılmaz.
+
+on-failure
+* Konteyner yalnızca bir hata kodu dönerse yeniden başlatılır. Bu durumda, hata kodunu belirterek yeniden başlatma politikası daha da özelleştirilebilir. 
+Örneğin, on-failure:5 komutu, konteynerin beş defa başarısız olmasının ardından yeniden başlatılmasını sağlar.
+
+****************************************************************************************************************************************************************************************
+
+command: sleep infinity 
+* Docker container larin sürekli çalışmasını sağlamak için kullanılan linux komutudur. Container lar  arka planda sürekli çalışsınlar eğer bir görev yoksa bile sürekli çalışsın
+
+****************************************************************************************************************************************************************************************
+
+
+
+version: '3.8'                            Docker Compose dosyasının sürümünü belirtir. Farklı sürümler, farklı özellikler ve yapılandırmalar sunar.
+services:                                 Docker Compose tarafından yönetilecek konteynerleri tanımlar. Her hizmet (service) bir konteyneri temsil eder.
+  web:                                    Nginx konteyneri için belirlenen hizmet adı.
+    container_name : web                  Nginx imagından oluşturulan container ın adi.
+    image: nginx:latest                   Kullanılacak Docker imajını belirtir
+    ports:                                Konteynerin dışarıya açacağı portları belirtir.
+      - "8080:80"                         8080 portunu 80 portuna yönlendirir        
+    volumes:    
+      - verilerim:/usr/share/nginx/html
+    networks:                            Konteynerlerin birbirleriyle iletişim kuracağı ağları tanımlar.
+      - frontend                         container i frontend ağına bağladır.
+    restart: always                      Konteynerin yeniden başlatılma politikasını belirler (no, always, unless-stopped, on-failure).
+    depends_on:                          db hizmetinin önce başlatılmasını sağlar.
+        - db 
+
+ db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+    command: sleep infinity          sleep infinity ile database imiz sürekli çalışır
+    restart: always
+    
+  
+volumes:
+  db-data:
+  verilerim:
+
+networks:                                Docker konteynerlerinin birbirleriyle nasıl iletişim kuracağını tanımlar. Konteynerler arasında özel ağlar oluşturmanıza olanak tanır.
+  frontend:                              frontend adında bridge modda bir network oluşturduk.
+    driver: bridge
+  backend:
+
+secrets:
+  my_secret:
+    file: ./secrets/my_secret.txt
+
+
+
+****************************************************************************************************************************************************************************************
+
+
+

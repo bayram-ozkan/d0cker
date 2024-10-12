@@ -1,0 +1,12 @@
+FROM mcr.microsoft.com/java/jdk:8-zulu-alpine AS stage
+WORKDIR /usr/src/uygulama 
+COPY .  .
+RUN javac uygulama.java
+
+FROM mcr.microsoft.com/java/jre:8-zulu-alpine   
+
+WORKDIR /uygulama
+COPY --from=stage /usr/src/uygulama  .
+CMD [ "java", "uygulama" ]
+
+

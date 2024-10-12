@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/mysql_password
+    secrets:
+      - mysql_password
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+    networks:
+      - web
+
+  database:
+    image: mysql:5.7
+    container_name: database
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+    secrets:
+      - mysql_password
+    networks:
+      - web
+
+networks:
+  web:
+    driver: overlay
+
+secrets:
+  mysql_password:
+#    external: true
+      file:
+        mysqlpass.txt

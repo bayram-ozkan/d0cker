@@ -1,0 +1,32 @@
+version : "3.8"
+
+services:
+  mysqldb:
+    image: ozgurozturknet/webdb             
+    environment:
+      MYSQL_DATABASE : PROJE
+      MYSQL_USER : projemaster
+      MYSQL_PASSWORD : master1234
+      MYSQL_ROOT_PASSWORD : master1234
+    networks:
+      - webnet
+
+  websrv:
+    build: .                                 #Aynı klasörde yer alan Dockerfile.compose i uild ediyoruz
+    depends_on:
+      - mysqldb
+    ports:
+      - "80:80"
+    restart: always
+    networks:
+      - webnet
+    environment:
+      DB_SERVER: mysqldb
+      DB_USERNAME : myprojemaster
+      DB_PASS : master1234
+      DB_NAME :  projemaster
+
+networks:
+  webnet:
+    driver: bridge
+    

@@ -1,0 +1,46 @@
+version: "3.7"
+
+services:
+
+  veritabani:
+    image: mysql:5.7 # image   : Kullanılacak Docker imajını belirtir.
+    restart: always # restart : Bu hizmetlerin (web ve db) her zaman yeniden başlatılmasını sağlar.
+    volumes: # volumes : Konteyner ile ana makine arasında paylaşılacak dosya veya dizinleri belirtir.
+    - verilerim:/var/lib/mysql
+    environment: # environment: Ortam değişkenlerini tanımlar.
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: word
+
+    # command: '--default-authentication-plugin=mysql_native_password'  # security ayalarını kaldırıyor
+
+    networks: # networks: Hizmetin hangi ağ(lar)a bağlanacağını belirtir.
+    - wpnet
+
+
+  wordpress:
+    image: wordpress
+    depends_on: # depends_on: Belirtilen hizmetlerin önce başlatılmasını sağlar.(veritabanı servisine bağlı)
+    - veritabani
+    restart: always
+    ports:
+    - "80:80" # ports: Konteynerin dışarıya açacağı portları belirtir.
+    environment:
+      WORDPRESS_DB_HOST: veritabani:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    networks:
+    - wpnet
+
+
+
+volumes:
+  verilerim:
+
+
+
+networks:
+  wpnet:
+    driver: bridge
