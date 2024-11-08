@@ -5,7 +5,14 @@ Docker Çalışma Notlarım (TR)
 # Docker Kılavuzu
 
 
-![Resim açıklaması](/images/docker1.png)
+
+<p align="center">
+  <img src="images/docker1.png" alt="Resim açıklaması" />
+</p>
+
+
+-----
+
 
 Docker, konteynerleştirme teknolojisini kullanarak uygulamaların ve onların bağımlılıklarının taşınabilir, izole edilmiş ortamlar içinde çalıştırılmasını sağlar. Geliştiricilerin uygulamalarını bir "konteyner" içinde paketlemelerine ve bu konteynerleri herhangi bir ortamda çalıştırmalarına olanak tanır. Bu sayede, "çalışıyor ama benim bilgisayarımda" sorunu ortadan kalkar.
 
