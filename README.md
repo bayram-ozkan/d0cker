@@ -107,5 +107,10 @@ Docker Registry, Docker imajlarının saklandığı ve paylaşıldığı bir pla
 
 # Temizlik Komutları
 
+
 Docker ortamını temizlemek için çeşitli komutlar bulunmaktadır. `docker system prune`, `docker container prune`, ve `docker volume prune` gibi komutlar, gereksiz dosya ve konteynerleri temizlemek için kullanılır.
+
+
+<a href="#top" class="top">Back to Top</a>
+
 
