@@ -2,7 +2,6 @@
   <img src="images/docker1.png" alt="Resim açıklaması" />
 </p>
 
-<a href="#top" class="top" id="table-of-contents">Top</a>
 
 ## İçindekiler
 
@@ -21,13 +20,13 @@
 - [Docker Registry](#docker-registry)
 - [Temizlik Komutları](#temizlik-komutları)
 
-<a href="#table-of-contents" class="top" id="docker-nedir">Top</a>
+
 
 # Docker Nedir?
 
 Docker, konteynerleştirme teknolojisini kullanarak uygulamaların ve onların bağımlılıklarının taşınabilir, izole edilmiş ortamlar içinde çalıştırılmasını sağlar. Geliştiricilerin uygulamalarını bir "konteyner" içinde paketlemelerine ve bu konteynerleri herhangi bir ortamda çalıştırmalarına olanak tanır. Bu sayede, "çalışıyor ama benim bilgisayarımda" sorunu ortadan kalkar.
 
-<a href="#table-of-contents" class="top" id="docker-mimarisi">Top</a>
+
 
 # Docker Mimarisi
 
@@ -51,37 +50,37 @@ Docker Network, konteynerlerin birbiriyle iletişim kurabilmesi için gerekli al
 
 Docker konteynerlerinin loglarını yönetmek, konteynerlerdeki uygulama ve sistem hatalarını izlemek için kritik öneme sahiptir. Docker, konteyner loglarını kolayca izleyebilmeniz için `docker logs` komutunu sunar.
 
-<a href="#table-of-contents" class="top" id="sistem-kaynaklari-yonetimi">Top</a>
+
 
 # Sistem Kaynakları Yönetimi
 
 Docker konteynerlerinin kaynak tüketimini kontrol etmek için `docker stats` komutu kullanılır. Bu komut, konteynerlerin CPU, bellek ve disk kullanımını gösterir.
 
-<a href="#table-of-contents" class="top" id="environment-variables">Top</a>
+
 
 # Environment Variables
 
 Docker konteynerlerinde çevresel değişkenler kullanarak yapılandırma ayarlarını dışarıdan kontrol edebilirsiniz. Bu, uygulamanın çalıştığı ortamı kolayca değiştirebilmenizi sağlar.
 
-<a href="#table-of-contents" class="top" id="dockerfile-kullanimi">Top</a>
+
 
 # Dockerfile Kullanımı
 
 Dockerfile, Docker imajlarını oluşturmak için kullanılan bir betik dosyasıdır. Bu dosya içerisinde imajın nasıl oluşturulacağına dair talimatlar bulunur.
 
-<a href="#table-of-contents" class="top" id="image-yonetimi">Top</a>
+
 
 # Image Yönetimi
 
 Docker imajları, konteynerlerin çalıştırılması için gereken tüm dosya ve bağımlılıkları içerir. Docker imajlarını yönetmek için `docker images` ve `docker rmi` komutları kullanılır.
 
-<a href="#table-of-contents" class="top" id="port-yayini">Top</a>
+
 
 # Port Yayını
 
 Docker konteynerleri genellikle yerel ağda çalışır. Ancak dış dünyaya erişebilmesi için, konteynerin belirli portlarını yaymanız gerekir. Bu, `docker run -p` komutuyla yapılabilir.
 
-<a href="#table-of-contents" class="top" id="dosya-kopyalama">Top</a>
+
 
 # Dosya Kopyalama
 
