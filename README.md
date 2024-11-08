@@ -2,13 +2,10 @@
   <img src="images/docker1.png" alt="Resim açıklaması" />
 </p>
 
-# Docker Nedir? 
-
-Docker, konteynerleştirme teknolojisini kullanarak uygulamaların ve onların bağımlılıklarının taşınabilir, izole edilmiş ortamlar içinde çalıştırılmasını sağlar. Geliştiricilerin uygulamalarını bir "konteyner" içinde paketlemelerine ve bu konteynerleri herhangi bir ortamda çalıştırmalarına olanak tanır. Bu sayede, "çalışıyor ama benim bilgisayarımda" sorunu ortadan kalkar.
 
 ## İçindekiler
 
-- [Konteyner Yönetimi](#konteyner-yönetimi)
+- [Docker Nedir](#docker-nedir)
 - [Docker Volume](#docker-volume)
 - [Docker Network](#docker-network)
 - [Log Yönetimi](#log-yönetimi)
@@ -16,19 +13,14 @@ Docker, konteynerleştirme teknolojisini kullanarak uygulamaların ve onların b
 - [Environment Variables](#environment-variables)
 - [Dockerfile Kullanımı](#dockerfile-kullanımı)
 - [Image Yönetimi](#image-yönetimi)
-- [Port Yayını](#port-yayını)
+- [Port Yayını](#port-yayıni)
 - [Dosya Kopyalama](#dosya-kopyalama)
 - [Konteynerden Image Oluşturma](#konteynerden-image-oluşturma)
 - [Image Yedekleme ve Geri Yükleme](#image-yedekleme-ve-geri-yükleme)
 - [Docker Registry](#docker-registry)
 - [Temizlik Komutları](#temizlik-komutları)
 
----
+# Docker Nedir?
 
-## Konteyner Yönetimi
+Docker, konteynerleştirme teknolojisini kullanarak uygulamaların ve onların bağımlılıklarının taşınabilir, izole edilmiş ortamlar içinde çalıştırılmasını sağlar. Geliştiricilerin uygulamalarını bir "konteyner" içinde paketlemelerine ve bu konteynerleri herhangi bir ortamda çalıştırmalarına olanak tanır. Bu sayede, "çalışıyor ama benim bilgisayarımda" sorunu ortadan kalkar.
 
-Docker ile konteyner oluşturmak ve yönetmek oldukça kolaydır. İşte bazı temel komutlar:
-
-- **Konteyner Oluşturma ve Çalıştırma:**
-  ```bash
-  docker container run -d --name test httpd
