@@ -7,6 +7,9 @@
 
 - [Docker Nedir](#docker-nedir)
 - [Docker Mimarisi](#docker-mimarisi)
+  *  [Docker Daemon(dockerd)](#docker-daemon)
+  *  [Docker CLI](#docker-cli)
+  *  [Docker Engine REST API](#docker-engine-rest-api)
 - [Docker Network](#docker-network)
 - [Log Yönetimi](#log-yönetimi)
 - [Sistem Kaynakları Yönetimi](#sistem-kaynakları-yönetimi)
@@ -27,16 +30,27 @@
 Docker, konteynerleştirme teknolojisini kullanarak uygulamaların ve onların bağımlılıklarının taşınabilir, izole edilmiş ortamlar içinde çalıştırılmasını sağlar. Geliştiricilerin uygulamalarını bir "konteyner" içinde paketlemelerine ve bu konteynerleri herhangi bir ortamda çalıştırmalarına olanak tanır. Bu sayede, "çalışıyor ama benim bilgisayarımda" sorunu ortadan kalkar.
 
 
+<p align="center">
+  <img src="images/docker-mimarisi.jpg" alt="Resim açıklaması" />
+</p>
+
 
 # Docker Mimarisi
 
 Docker mimarisi, konteyner tabanlı uygulamaları verimli ve taşınabilir bir şekilde çalıştırmayı sağlayan bileşenlerden oluşur. Temel olarak, Docker mimarisi Docker Daemon, Docker CLI, Docker Image, Docker Container, Docker Registry gibi bileşenleri içerir.
 
-- **Docker Daemon**: Docker motoru olarak da bilinir. Docker konteynerlerini çalıştıran ve yöneten ana bileşendir.
-- **Docker CLI**: Komut satırından Docker ile etkileşim sağlayan araçtır. Kullanıcılar burada komutlar girerek Docker'ı kontrol eder.
-- **Docker Image**: Uygulamanın çalıştırılabilir halini içeren, üzerinde işletim sistemi ve bağımlılıkların bulunduğu yapı taşlarıdır.
-- **Docker Container**: Docker Image’larından türetilen, izole bir ortamda çalışan uygulamalardır.
-- **Docker Registry**: Docker imajlarının depolandığı ve paylaşıldığı bir platformdur. Docker Hub en yaygın kullanılan registry’dir.
+
+#### Docker Daemon
+Docker Daemon, Docker’ın arka plan sürecidir ve Docker CLI veya Docker API’den gelen komutları işler. Daemon, Docker’ın imaj ve konteyner yönetiminden, ağ yapılandırmasından ve hacim oluşturulmasından sorumludur. Hypervisor’ün dockerdaki karşılığıdır. Bütün CPU ve RAM vb gibi işletim sistemine ait işlerin yapıldığı bölümdür.
+
+#### Docker CLI 
+Kullanıcının Docker Daemon ile konuşmasını sağlayan, docker komutlarının çalıştırıldığı CLI ekranıdır. 
+
+#### Docker Engine REST API:
+Docker daemon servisine dışarıdan CLI veya uygulamalar tarafından Rest API aracılığı ile erişerek komutlar verebilmeyi sağlayan bileşendir.
+
+
+
 
 
 
