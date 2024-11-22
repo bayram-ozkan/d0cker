@@ -266,7 +266,6 @@ docker run -d  --name my-nginx1  -p 9090:80  -v /home/caner/test/web-sayfa:/usr/
 #########################################################################################################################################
 -- docker image
 
-
 *Docker imaj oluşturmak için   Dockerfile e bakıyor her katman için  talimatlara bakıyor. Talimatlarda değişiklik  varsa eğer o talimata kadar
 olan kısımları cache(önbellek) ten hızlıca yüklüyor. Burda talimatların sıralaması önemlidir.
 Dockerfile da değişmeyecek kısımlar en başta, değişecek kısımlar en sona yazılmalıdır. Mümkün olduğu kadar çok cache kullanılması sağlanılmalıdır.
@@ -294,6 +293,17 @@ docker image tag myapp:latest myrepo/myapp:v1.0
 
 
 docker image pull nginx   #Mevcut nginx image ini local a çeker
+
+
+
+docker images -f "dangling=true"
+Docker üzerinde "dangling" (yani, kullanılmayan ve silinebilecek) imajları listelemek için kullanılır.
+
+
+docker image prune -f 
+Docker'da kullanılmayan imajları temizlemek için kullanılır. Bu komut, "dangling" (boşta duran) imajları siler. Yani, bir etiketle ilişkilendirilmemiş ve Docker sisteminde yer kaplayan eski imajları temizler.
+
+
 
 
 #########################################################################################################################################
