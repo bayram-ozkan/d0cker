@@ -3,6 +3,9 @@
 # Docker Kurulum Scripti
 set -e
 
+# DEBIAN_FRONTEND değişkenini noninteractive yaparak interaktif onay ekranlarını devre dışı bırakıyoruz
+export DEBIAN_FRONTEND=noninteractive
+
 # Sistem paketlerini güncelle
 echo "Sistem güncelleniyor..."
 sudo apt-get update -y
@@ -46,7 +49,7 @@ echo "Docker kurulumu doğrulanıyor..."
 sudo docker --version
 
 # Kullanıcıya Docker'ı kullanabilmesi için çıkış yapması gerektiğini bildir
-echo "Docker kurulumu tamamlandı. Şimdi, Docker'ı kullanabilmek için çıkış yapıp tekrar oturum açmanız veya terminali yeniden başlatmanız gerekiyor."
+# echo "Docker kurulumu tamamlandı. Şimdi, Docker'ı kullanabilmek için çıkış yapıp tekrar oturum açmanız veya terminali yeniden başlatmanız gerekiyor."
 
 # Alternatif olarak, aşağıdaki komutla çıkışı otomatikleştirebilirsiniz:
 # exit
