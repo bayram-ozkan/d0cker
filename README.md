@@ -55,8 +55,12 @@ Docker daemon servisine dışarıdan CLI veya uygulamalar tarafından Rest API a
 
 
 
+## Docker kurulumu 
 
+```
+ curl -s https://raw.githubusercontent.com/bayram-ozkan/d0cker/refs/heads/main/_docker-install.sh | sudo bash
 
+```
 
 <a href="#top" class="top">Back to Top</a>
 
