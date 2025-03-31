@@ -273,9 +273,12 @@ Bu sayede hızlıca imaj oluşturulması sağlanır.
 
 docker image ls           #Mevtcut image ları listeler.
 
+docker image history <image_name_or_id>  #Docker imajının oluşturulma sürecini adım adım gösterir. İmajın hangi komutlarla inşa edildiğini, her katmanda hangi değişikliklerin yapıldığını ve katmanların boyutlarını öğrenmek için kullanılır.
+
+
 #Dockerfile oluşturulur.
 
-docker image build -t test1  .         # Dockerfile i build ettik
+docker image build -t test1  .         # Dockerfile i build ettik.
 
 docker image build -t version1 --build-arg VERSION=3.8.1 . 
 
