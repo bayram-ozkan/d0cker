@@ -12,7 +12,7 @@ UDP port 4789 (Overlay Network için)
 #################################################################################################################################
 ************************************************** Docker Swarm kurulumu ********************************************************
 docker swarm
-
+FQN İçin DNS yapılandırması yapılabilir.
 
 192.168.1.101 ansibledocker.docker.local ansibledocker
 192.168.1.51 devopsdocker1.docker.local  devopsdocker1
@@ -33,11 +33,11 @@ docker swarm join --token SWMTKN-1-0m5h48bu4v6m0gysbol5yux4dd0bpqdye0jhzojqmzlwd
 **************************************************Docker  swarm komutları ******************************************************
 ################################################################################################################################
 
-
-
 docker swarm init                      
  # Docker swarm i devreye alır
 
+docker swarm leave
+ # Docker swarm dan ayrılır. 
 
 docker swarm init --advertise-addr  192.168.0.1 8
  # Docker swarm i belirtilen ip adresinde devreye alır
@@ -47,7 +47,6 @@ docker swarm join-token manager
 
 docker swarm join-token worker         
  # Worker node oluşturmak için token verir
-
 
 
 docker node ls          
@@ -95,7 +94,6 @@ docker service rm myservice
 
 
 dockear network create -d overley over-net 
-
 
 
 docker secret create 
