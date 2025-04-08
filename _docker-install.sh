@@ -18,6 +18,8 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 # Kullanıcıyı Docker grubuna ekle
 echo "Kullanıcı Docker grubuna ekleniyor..."
 sudo usermod -aG docker $USER
+#newgrp docker
+
 
 # Docker'ı çalıştırmayı test et
 echo "Docker servisinin başlatılması..."
