@@ -365,6 +365,9 @@ docker save [OPTIONS] IMAGE [IMAGE...]
 
 docker save -o my_image.tar my_image:latest
 
+docker save jenkins/jenkins:latest > jenkins_latest.tar
+
+
 
 #########################################################################################################################################
 #########################################################################################################################################
@@ -374,6 +377,8 @@ docker save -o my_image.tar my_image:latest
 *Kaydedilen image ları başka bir sistemde veya aynı sistemde geri yüklemek için docker load komutunu kullanabilirsiniz.
 
 docker load -i my_image.tar
+
+
 
 
 
