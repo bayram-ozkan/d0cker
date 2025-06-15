@@ -27,7 +27,14 @@
 
 # Docker Nedir?
 
-Docker, konteynerleştirme teknolojisini kullanarak uygulamaların ve onların bağımlılıklarının taşınabilir, izole edilmiş ortamlar içinde çalıştırılmasını sağlar. Geliştiricilerin uygulamalarını bir "konteyner" içinde paketlemelerine ve bu konteynerleri herhangi bir ortamda çalıştırmalarına olanak tanır. Bu sayede, "çalışıyor ama benim bilgisayarımda" sorunu ortadan kalkar.
+Docker, konteynerleştirme teknolojisini kullanarak uygulamaların ve onların bağımlılıklarının taşınabilir, izole edilmiş ortamlar içinde çalıştırılmasını sağlar. Geliştiricilerin uygulamalarını bir "konteyner" içinde paketlemelerine ve bu konteynerleri herhangi bir ortamda çalıştırmalarına olanak tanır. Bu sayede,  "benim bilgisayarımda çalışıyordu" sorunu ortadan kalkar.
+
+# Neden Docker?
+* ıncreased portability  - dont have to wory abaout enviroment
+* improve scability - vertical, horizantal
+* simple and fast deployment - quickly create new containerized instances or rapidly destroy multiple containers
+* enhance productivity - promotes a rapid development environment, simplify the installition process and decrease dependency errors
+* improve security - each application's major process apart from one another  in separate containers
 
 
 # Container Nedir ?
